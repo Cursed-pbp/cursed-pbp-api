@@ -1,0 +1,40 @@
+service: petshop${file(versioning.jenkins.js):version} #the ${} is used by jenkins to up version in pr
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "*"
+  environment:
+    IS_SERVERLESS: true
+
+package:
+  exclude:
+    - tests/**
+    - .git/**
+    - coverage/**
+    - src/**
+    - node_modules/@types/**
+    - testresults
+    - build/**/*.js.map
+    - build/test/**
+    - tsconfig.json
+
+functions:
+  pets:
+    handler: build/src/functions/posts/handler.handler
+    events:
+      - http:
+          path: posts
+          method: GET
+          cors: true
+      - http:
+          path: posts
+          method: POST
+          cors: true
+
+plugins:
+  - serverless-offline

@@ -1,0 +1,54 @@
+{
+  "name": "cursed-pbp-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "$(npm bin)/shx rm -rf build && $(npm bin)/shx rm -rf coverage && $(npm bin)/shx rm -rf testreports && $(npm bin)/shx rm -rf .serverless && npm install && npm run lint",
+    "lint": "$(npm bin)/tslint -c ./tslint.json 'src/**/*.ts' 'test/**/*.ts'",
+    "prestart": "npm run clean && tsc",
+    "start": "node --inspect $(npm bin)/serverless offline start",
+    "predeploy": "npm run clean && tsc && npm prune --production",
+    "deploy": "$(npm bin)/serverless deploy",
+    "build": "npm run clean && tsc",
+    "precover": "npm run clean && tsc",
+    "cover": "$(npm bin)/istanbul cover --include-all-sources -x '*.jenkins.js' -x 'test/**' node_modules/mocha/bin/_mocha -- -- -u exports -R json --require build/test/index.js build/test/**/*.js",
+    "postcover": "node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/html -t html",
+    "pretest": "npm run clean && tsc",
+    "test": "$(npm bin)/mocha --recursive --require build/test/index.js build/test",
+    "pretestdebug": "npm run clean && tsc",
+    "testdebug": "$(npm bin)/mocha --recursive --require build/test/index.js --debug-brk build/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cursed-pbp/cursed-pbp-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cursed-pbp/cursed-pbp-api/issues"
+  },
+  "homepage": "https://github.com/Cursed-pbp/cursed-pbp-api#readme",
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "dotenv": "^6.1.0",
+    "serverless": "^1.32.0",
+    "serverless-offline": "^3.27.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.0",
+    "@types/sinon": "^5.0.5",
+    "aws-sdk": "^2.335.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "remap-istanbul": "^0.12.0",
+    "shx": "^0.3.2",
+    "sinon": "^7.0.0",
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^5.2.1",
+    "typescript": "^3.1.3",
+    "typings": "^2.1.1"
+  }
+}
